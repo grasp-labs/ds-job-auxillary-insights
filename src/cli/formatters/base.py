@@ -19,7 +19,6 @@ class Formatter(ABC):
         Returns:
             Formatted string output
         """
-        pass
 
     def write(self, summary: dict[str, Any], output_path: Path | None = None) -> None:
         """

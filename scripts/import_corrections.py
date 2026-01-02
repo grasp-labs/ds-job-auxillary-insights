@@ -3,15 +3,14 @@
 
 import argparse
 import csv
-import json
 import logging
 import sys
 from pathlib import Path
 
-from classifier.feedback import FeedbackStore
 from classifier.categories import FailureCategory
+from classifier.feedback import FeedbackStore
 
-logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger(__name__)
 
 
@@ -33,29 +32,29 @@ def import_corrections_from_csv(csv_file: Path, user: str | None = None) -> int:
     """
     feedback_store = FeedbackStore()
     corrections_count = 0
-    
-    with open(csv_file, 'r') as f:
+
+    with open(csv_file) as f:
         reader = csv.DictReader(f)
-        
+
         # Validate required columns
-        required_cols = ['Job ID', 'Activity Name', 'Error Category', 'Error Message']
+        required_cols = ["Job ID", "Activity Name", "Error Category", "Error Message"]
         missing_cols = [col for col in required_cols if col not in reader.fieldnames]
         if missing_cols:
             logger.error(f"Missing required columns: {missing_cols}")
             logger.error(f"Available columns: {reader.fieldnames}")
             return 0
-        
+
         for row in reader:
-            job_id = row['Job ID']
-            activity_name = row['Activity Name']
-            original_category = row['Error Category']
-            
+            job_id = row["Job ID"]
+            activity_name = row["Activity Name"]
+            original_category = row["Error Category"]
+
             # Check if there's a correction
-            corrected_category = row.get('Corrected Category', '').strip()
+            corrected_category = row.get("Corrected Category", "").strip()
             if not corrected_category or corrected_category == original_category:
                 # No correction needed
                 continue
-            
+
             # Validate corrected category
             try:
                 FailureCategory(corrected_category)
@@ -64,18 +63,18 @@ def import_corrections_from_csv(csv_file: Path, user: str | None = None) -> int:
                     f"Invalid category '{corrected_category}' for job {job_id}, skipping"
                 )
                 continue
-            
+
             # Build error dict from CSV
             error = {
-                'code': row.get('Error Code', ''),
-                'message': row.get('Error Message', ''),
-                'exception': row.get('Exception Type', ''),
-                'details': {}
+                "code": row.get("Error Code", ""),
+                "message": row.get("Error Message", ""),
+                "exception": row.get("Exception Type", ""),
+                "details": {}
             }
-            
+
             # Get notes if available
-            notes = row.get('Notes', '') or row.get('Reasoning', '')
-            
+            notes = row.get("Notes", "") or row.get("Reasoning", "")
+
             # Add correction
             feedback_store.add_correction(
                 job_id=job_id,
@@ -86,13 +85,13 @@ def import_corrections_from_csv(csv_file: Path, user: str | None = None) -> int:
                 user=user,
                 notes=notes,
             )
-            
+
             corrections_count += 1
             logger.info(
                 f"Imported correction: {original_category} → {corrected_category} "
                 f"(job {job_id[:8]}...)"
             )
-    
+
     return corrections_count
 
 
@@ -128,7 +127,7 @@ CSV Format:
     - Exception Type
         """,
     )
-    
+
     parser.add_argument(
         "csv_file",
         type=Path,
@@ -144,25 +143,25 @@ CSV Format:
         action="store_true",
         help="Enable verbose logging",
     )
-    
+
     args = parser.parse_args()
-    
+
     if args.verbose:
         logging.getLogger().setLevel(logging.DEBUG)
-    
+
     if not args.csv_file.exists():
         logger.error(f"File not found: {args.csv_file}")
         return 1
-    
+
     logger.info(f"Importing corrections from {args.csv_file}...")
     count = import_corrections_from_csv(args.csv_file, args.user)
-    
+
     if count > 0:
         logger.info(f"✅ Successfully imported {count} corrections!")
         logger.info("These will be used as examples in future LLM classifications.")
     else:
         logger.info("No corrections found in CSV (no 'Corrected Category' column or no changes)")
-    
+
     return 0
 
 

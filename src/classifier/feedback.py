@@ -2,7 +2,7 @@
 
 import json
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -56,7 +56,7 @@ class FeedbackStore:
         feedback = self._load_feedback()
 
         correction = {
-            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "timestamp": datetime.now(UTC).isoformat(),
             "job_id": job_id,
             "activity_name": activity_name,
             "error": error,
@@ -190,7 +190,7 @@ class FeedbackStore:
     def _load_feedback(self) -> list[dict[str, Any]]:
         """Load feedback from file."""
         try:
-            with open(self.feedback_file, "r") as f:
+            with open(self.feedback_file) as f:
                 data: list[dict[str, Any]] = json.load(f)
                 return data
         except (FileNotFoundError, json.JSONDecodeError):

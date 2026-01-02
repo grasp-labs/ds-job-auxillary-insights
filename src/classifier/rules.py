@@ -1,11 +1,10 @@
 """Rule-based pattern matching for failure classification."""
 
-from typing import List, Tuple
 
 # Pattern format: (regex_pattern, reasoning)
 # Patterns are case-insensitive
 
-INPUT_DATA_PATTERNS: List[Tuple[str, str]] = [
+INPUT_DATA_PATTERNS: list[tuple[str, str]] = [
     # Validation errors
     (r"validation.*fail", "Validation failure"),
     (r"missing.*field", "Missing required field"),
@@ -35,7 +34,7 @@ INPUT_DATA_PATTERNS: List[Tuple[str, str]] = [
     (r"DatasetException", "Dataset exception"),
 ]
 
-THIRD_PARTY_PATTERNS: List[Tuple[str, str]] = [
+THIRD_PARTY_PATTERNS: list[tuple[str, str]] = [
     # Provider-specific
     (r"xledger", "Xledger API error"),
     (r"visma", "Visma API error"),
@@ -83,7 +82,7 @@ THIRD_PARTY_PATTERNS: List[Tuple[str, str]] = [
     (r"IOException", "IO exception"),
 ]
 
-WORKFLOW_ENGINE_PATTERNS: List[Tuple[str, str]] = [
+WORKFLOW_ENGINE_PATTERNS: list[tuple[str, str]] = [
     # Activity errors
     (r"activity.*not.*found", "Activity not found"),
     (r"ActivityNotFoundError", "Activity not found"),

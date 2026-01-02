@@ -4,7 +4,7 @@ import json
 import logging
 from collections import defaultdict
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from typing import Any
 from uuid import UUID
 
@@ -118,7 +118,7 @@ class FailureAnalyzerJob:
         Returns:
             AnalysisSummary with all results
         """
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
         if until is None:
             until = now
         if since is None:

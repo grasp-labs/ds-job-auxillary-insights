@@ -8,8 +8,8 @@ from cli.formatters.json import JSONFormatter
 from cli.formatters.text import TextFormatter
 
 __all__ = [
-    "Formatter",
     "CSVFormatter",
+    "Formatter",
     "JSONFormatter",
     "TextFormatter",
 ]
@@ -17,7 +17,7 @@ __all__ = [
 
 def get_formatter(format_type: str) -> Formatter:
     """Factory function to get the appropriate formatter."""
-    formatters: dict[str, Type[Formatter]] = {
+    formatters: dict[str, type[Formatter]] = {
         "text": TextFormatter,
         "json": JSONFormatter,
         "csv": CSVFormatter,

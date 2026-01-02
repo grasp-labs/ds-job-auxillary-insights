@@ -29,7 +29,7 @@ class TextFormatter(Formatter):
         by_category = summary.get("by_category", {})
         if by_category:
             for category, count in sorted(by_category.items(), key=lambda x: x[1], reverse=True):
-                percentage = (count / summary['total_errors'] * 100) if summary['total_errors'] > 0 else 0
+                percentage = (count / summary["total_errors"] * 100) if summary["total_errors"] > 0 else 0
                 lines.append(f"  {category:25s}: {count:4d} ({percentage:5.1f}%)")
         else:
             lines.append("  No errors found")
@@ -72,19 +72,19 @@ class TextFormatter(Formatter):
             lines.append("-" * 140)
 
             for result in results:
-                job_id = result['job_id'][:8]
-                pipeline = result.get('pipeline_name', 'Unknown')[:24]
+                job_id = result["job_id"][:8]
+                pipeline = result.get("pipeline_name", "Unknown")[:24]
 
                 # Show each error classification
-                for classification in result.get('classifications', []):
-                    activity = classification.get('activity_name', 'N/A')[:19]
-                    category = classification.get('category', 'UNKNOWN')[:19]
-                    classified_by = classification.get('classified_by', 'unk')[:5]
-                    error_msg = classification.get('original_error', {}).get('message', 'No message')[:39]
+                for classification in result.get("classifications", []):
+                    activity = classification.get("activity_name", "N/A")[:19]
+                    category = classification.get("category", "UNKNOWN")[:19]
+                    classified_by = classification.get("classified_by", "unk")[:5]
+                    error_msg = classification.get("original_error", {}).get("message", "No message")[:39]
 
                     lines.append(f"{job_id:<10} {pipeline:<25} {activity:<20} {category:<20} {classified_by:<6} {error_msg:<40}")
 
-            total_errors = sum(len(r.get('classifications', [])) for r in results)
+            total_errors = sum(len(r.get("classifications", [])) for r in results)
             lines.append(f"\nTotal: {total_errors} errors across {len(results)} jobs")
         else:
             lines.append("  No errors found")

@@ -7,7 +7,7 @@ import json
 import logging
 import os
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 from uuid import UUID
@@ -46,7 +46,7 @@ def print_markdown_summary(summary: dict[str, Any]) -> None:
         print("| Category | Count | Percentage |")
         print("|----------|-------|------------|")
         for category, count in sorted(by_category.items(), key=lambda x: x[1], reverse=True):
-            percentage = (count / summary['total_errors'] * 100) if summary['total_errors'] > 0 else 0
+            percentage = (count / summary["total_errors"] * 100) if summary["total_errors"] > 0 else 0
             print(f"| {category} | {count} | {percentage:.1f}% |")
     else:
         print("*No errors found*")
@@ -92,16 +92,16 @@ def print_markdown_summary(summary: dict[str, Any]) -> None:
     results = summary.get("results", [])
     if results:
         for result in results:
-            job_id = result['job_id'][:8]  # Shortened for readability
-            pipeline = result.get('pipeline_name', 'Unknown')[:30]  # Truncate long names
-            finished_at = result.get('finished_at', 'Unknown')[:19] if result.get('finished_at') else 'Unknown'
+            job_id = result["job_id"][:8]  # Shortened for readability
+            pipeline = result.get("pipeline_name", "Unknown")[:30]  # Truncate long names
+            finished_at = result.get("finished_at", "Unknown")[:19] if result.get("finished_at") else "Unknown"
 
             # Show each error classification
-            for classification in result.get('classifications', []):
-                activity = classification.get('activity_name', 'N/A')[:25]
-                category = classification.get('category', 'UNKNOWN')
-                classified_by = classification.get('classified_by', 'unknown')
-                error_msg = classification.get('original_error', {}).get('message', 'No message')[:50]
+            for classification in result.get("classifications", []):
+                activity = classification.get("activity_name", "N/A")[:25]
+                category = classification.get("category", "UNKNOWN")
+                classified_by = classification.get("classified_by", "unknown")
+                error_msg = classification.get("original_error", {}).get("message", "No message")[:50]
 
                 print(f"| {job_id} | {pipeline} | {activity} | {category} | {classified_by} | {error_msg} | {finished_at} |")
     else:
@@ -179,46 +179,46 @@ def export_csv(summary: dict[str, Any], output_file: Path | None = None) -> None
     if output_file is None:
         output = io.StringIO()
     else:
-        output = open(output_file, 'w', newline='')
+        output = open(output_file, "w", newline="")
 
     try:
         writer = csv.writer(output)
 
         # Header
         writer.writerow([
-            'Job ID',
-            'Pipeline Name',
-            'Tenant ID',
-            'Finished At',
-            'Activity Name',
-            'Error Category',
-            'Classified By',
-            'Confidence',
-            'Reasoning',
-            'Error Code',
-            'Error Message',
-            'Exception Type'
+            "Job ID",
+            "Pipeline Name",
+            "Tenant ID",
+            "Finished At",
+            "Activity Name",
+            "Error Category",
+            "Classified By",
+            "Confidence",
+            "Reasoning",
+            "Error Code",
+            "Error Message",
+            "Exception Type"
         ])
 
         # Data rows
         results = summary.get("results", [])
         for result in results:
-            job_id = result['job_id']
-            pipeline = result.get('pipeline_name', 'Unknown')
-            tenant_id = result.get('tenant_id', 'Unknown')
-            finished_at = result.get('finished_at', 'Unknown')
+            job_id = result["job_id"]
+            pipeline = result.get("pipeline_name", "Unknown")
+            tenant_id = result.get("tenant_id", "Unknown")
+            finished_at = result.get("finished_at", "Unknown")
 
-            for classification in result.get('classifications', []):
-                activity = classification.get('activity_name', 'N/A')
-                category = classification.get('category', 'UNKNOWN')
-                classified_by = classification.get('classified_by', 'unknown')
-                confidence = classification.get('confidence', 0.0)
-                reasoning = classification.get('reasoning', 'N/A')
+            for classification in result.get("classifications", []):
+                activity = classification.get("activity_name", "N/A")
+                category = classification.get("category", "UNKNOWN")
+                classified_by = classification.get("classified_by", "unknown")
+                confidence = classification.get("confidence", 0.0)
+                reasoning = classification.get("reasoning", "N/A")
 
-                error = classification.get('original_error', {})
-                error_code = error.get('code', '')
-                error_msg = error.get('message', 'No message')
-                exception = error.get('exception', 'N/A')
+                error = classification.get("original_error", {})
+                error_code = error.get("code", "")
+                error_msg = error.get("message", "No message")
+                exception = error.get("exception", "N/A")
 
                 writer.writerow([
                     job_id,
@@ -273,7 +273,7 @@ def print_summary(summary: dict[str, Any], format: str = "text") -> None:
     by_category = summary.get("by_category", {})
     if by_category:
         for category, count in sorted(by_category.items(), key=lambda x: x[1], reverse=True):
-            percentage = (count / summary['total_errors'] * 100) if summary['total_errors'] > 0 else 0
+            percentage = (count / summary["total_errors"] * 100) if summary["total_errors"] > 0 else 0
             print(f"  {category:25s}: {count:4d} ({percentage:5.1f}%)")
     else:
         print("  No errors found")
@@ -313,15 +313,15 @@ def print_summary(summary: dict[str, Any], format: str = "text") -> None:
         print("-" * 140)
 
         for result in results:
-            job_id = result['job_id'][:8]
-            pipeline = result.get('pipeline_name', 'Unknown')[:24]
+            job_id = result["job_id"][:8]
+            pipeline = result.get("pipeline_name", "Unknown")[:24]
 
             # Show each error classification
-            for classification in result.get('classifications', []):
-                activity = classification.get('activity_name', 'N/A')[:19]
-                category = classification.get('category', 'UNKNOWN')[:19]
-                classified_by = classification.get('classified_by', 'unk')[:5]
-                error_msg = classification.get('original_error', {}).get('message', 'No message')[:39]
+            for classification in result.get("classifications", []):
+                activity = classification.get("activity_name", "N/A")[:19]
+                category = classification.get("category", "UNKNOWN")[:19]
+                classified_by = classification.get("classified_by", "unk")[:5]
+                error_msg = classification.get("original_error", {}).get("message", "No message")[:39]
 
                 print(f"{job_id:<10} {pipeline:<25} {activity:<20} {category:<20} {classified_by:<6} {error_msg:<40}")
 
@@ -432,8 +432,8 @@ Environment Variables:
 
     try:
         # Parse arguments
-        since = datetime.fromisoformat(args.since).replace(tzinfo=timezone.utc) if args.since else None
-        until = datetime.fromisoformat(args.until).replace(tzinfo=timezone.utc) if args.until else None
+        since = datetime.fromisoformat(args.since).replace(tzinfo=UTC) if args.since else None
+        until = datetime.fromisoformat(args.until).replace(tzinfo=UTC) if args.until else None
         tenant_id = UUID(args.tenant_id) if args.tenant_id else None
 
         # Set LLM environment variables if specified

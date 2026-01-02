@@ -3,8 +3,9 @@
 import contextlib
 import logging
 import os
-from datetime import datetime, timedelta, timezone
-from typing import Any, Generator
+from collections.abc import Generator
+from datetime import UTC, datetime, timedelta
+from typing import Any
 from uuid import UUID
 
 import boto3
@@ -95,9 +96,9 @@ def get_failed_jobs(
         List of job execution dicts with id, pipeline_id, data, etc.
     """
     if since is None:
-        since = datetime.now(timezone.utc) - timedelta(hours=24)
+        since = datetime.now(UTC) - timedelta(hours=24)
     if until is None:
-        until = datetime.now(timezone.utc)
+        until = datetime.now(UTC)
 
     query = text("""
         SELECT
