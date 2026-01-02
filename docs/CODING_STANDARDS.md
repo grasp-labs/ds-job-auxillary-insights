@@ -145,3 +145,65 @@ except:
 - Use `__init__.py` to expose public APIs
 - Keep internal implementation details private
 
+---
+
+## 5. Enforcing Standards with Ruff
+
+This project uses **ruff** to automatically enforce coding standards.
+
+### Running Ruff
+
+```bash
+# Check for issues
+uv run ruff check src/ tests/ scripts/
+
+# Auto-fix issues
+uv run ruff check src/ tests/ scripts/ --fix
+
+# Format code
+uv run ruff format src/ tests/ scripts/
+```
+
+### Before Committing
+
+Always run these commands before committing:
+
+```bash
+# 1. Auto-fix code quality issues
+uv run ruff check src/ tests/ scripts/ --fix
+
+# 2. Run tests
+uv run pytest tests/
+
+# 3. Type check
+uv run mypy src/
+```
+
+### What Ruff Enforces
+
+- ✅ **Import sorting** - Standard library, third-party, local imports
+- ✅ **Type hints** - Enforces type annotations (ANN rules)
+- ✅ **Code quality** - Detects bugs, anti-patterns (B, PIE, SIM rules)
+- ✅ **Complexity** - Warns about too many branches/statements (PLR rules)
+- ✅ **Best practices** - Enforces Python idioms (UP, RUF rules)
+- ✅ **Error handling** - Proper exception usage (EM, RSE rules)
+- ✅ **Testing** - pytest best practices (PT rules)
+
+### Ruff Configuration
+
+See `pyproject.toml` for the full configuration. Key rules enabled:
+
+```toml
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "F",      # pyflakes
+    "I",      # isort (import sorting)
+    "ANN",    # type hints
+    "B",      # bugbear
+    "SIM",    # simplify
+    "PLR",    # pylint refactor
+    # ... and more
+]
+```
+
