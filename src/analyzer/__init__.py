@@ -1,5 +1,5 @@
 """Analyzer job module."""
 
-from src.analyzer.job import FailureAnalyzerJob
+from analyzer.job import FailureAnalyzerJob
 
 __all__ = ["FailureAnalyzerJob"]

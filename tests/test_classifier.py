@@ -2,7 +2,7 @@
 
 import pytest
 
-from src.classifier import FailureCategory, FailureClassifier, ClassifiedFailure
+from classifier import FailureCategory, FailureClassifier, ClassifiedFailure
 
 
 class TestFailureClassifier:

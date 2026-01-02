@@ -9,9 +9,9 @@ from typing import Any
 
 import requests
 
-from src.classifier.categories import FailureCategory
-from src.classifier.feedback import FeedbackStore
-from src.classifier.rules import (
+from classifier.categories import FailureCategory
+from classifier.feedback import FeedbackStore
+from classifier.rules import (
     INPUT_DATA_PATTERNS,
     THIRD_PARTY_PATTERNS,
     WORKFLOW_ENGINE_PATTERNS,

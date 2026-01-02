@@ -49,7 +49,8 @@ def get_db_uri() -> str:
     logger.debug(f"Fetching database URI from SSM: {parameter_name}")
     ssm = boto3.client("ssm", region_name=os.environ.get("AWS_REGION", "eu-north-1"))
     response = ssm.get_parameter(Name=parameter_name, WithDecryption=True)
-    return response["Parameter"]["Value"]
+    value: str = response["Parameter"]["Value"]
+    return value
 
 
 @contextlib.contextmanager

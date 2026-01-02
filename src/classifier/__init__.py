@@ -1,6 +1,6 @@
 """Failure classification module."""
 
-from src.classifier.categories import FailureCategory
-from src.classifier.classifier import FailureClassifier, ClassifiedFailure
+from classifier.categories import FailureCategory
+from classifier.classifier import ClassifiedFailure, FailureClassifier
 
 __all__ = ["FailureCategory", "FailureClassifier", "ClassifiedFailure"]

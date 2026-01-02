@@ -6,7 +6,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from src.classifier.categories import FailureCategory
+from classifier.categories import FailureCategory
 
 logger = logging.getLogger(__name__)
 
@@ -23,14 +23,14 @@ class FeedbackStore:
         """
         if feedback_file is None:
             feedback_file = Path(__file__).parent.parent.parent / "data" / "feedback.json"
-        
+
         self.feedback_file = feedback_file
         self.feedback_file.parent.mkdir(parents=True, exist_ok=True)
-        
+
         # Initialize file if it doesn't exist
         if not self.feedback_file.exists():
             self._save_feedback([])
-    
+
     def add_correction(
         self,
         job_id: str,
@@ -54,7 +54,7 @@ class FeedbackStore:
             notes: Optional notes about why this correction was made
         """
         feedback = self._load_feedback()
-        
+
         correction = {
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "job_id": job_id,
@@ -65,15 +65,15 @@ class FeedbackStore:
             "user": user,
             "notes": notes,
         }
-        
+
         feedback.append(correction)
         self._save_feedback(feedback)
-        
+
         logger.info(
             f"Recorded correction: {original_category} -> {corrected_category} "
             f"for job {job_id}, activity {activity_name}"
         )
-    
+
     def get_corrections(
         self,
         category: FailureCategory | None = None,
@@ -90,21 +90,21 @@ class FeedbackStore:
             List of correction records
         """
         feedback = self._load_feedback()
-        
+
         if category:
             feedback = [
                 f for f in feedback
                 if f["corrected_category"] == category.value
             ]
-        
+
         # Sort by timestamp (newest first)
         feedback.sort(key=lambda x: x["timestamp"], reverse=True)
-        
+
         if limit:
             feedback = feedback[:limit]
-        
+
         return feedback
-    
+
     def get_few_shot_examples(self, max_examples: int = 10) -> list[dict[str, Any]]:
         """
         Get recent corrections formatted as few-shot examples for LLM prompt.
@@ -151,7 +151,7 @@ class FeedbackStore:
             })
 
         return examples
-    
+
     def export_for_finetuning(self, output_file: Path) -> None:
         """
         Export corrections in JSONL format for LLM fine-tuning.
@@ -160,7 +160,7 @@ class FeedbackStore:
             output_file: Path to output JSONL file
         """
         examples = self.get_training_examples()
-        
+
         with open(output_file, "w") as f:
             for example in examples:
                 # Format as OpenAI fine-tuning format
@@ -184,17 +184,18 @@ class FeedbackStore:
                     ]
                 }
                 f.write(json.dumps(training_example) + "\n")
-        
+
         logger.info(f"Exported {len(examples)} training examples to {output_file}")
-    
+
     def _load_feedback(self) -> list[dict[str, Any]]:
         """Load feedback from file."""
         try:
             with open(self.feedback_file, "r") as f:
-                return json.load(f)
+                data: list[dict[str, Any]] = json.load(f)
+                return data
         except (FileNotFoundError, json.JSONDecodeError):
             return []
-    
+
     def _save_feedback(self, feedback: list[dict[str, Any]]) -> None:
         """Save feedback to file."""
         with open(self.feedback_file, "w") as f:

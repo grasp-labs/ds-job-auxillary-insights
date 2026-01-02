@@ -6,8 +6,8 @@ from pathlib import Path
 
 import pytest
 
-from src.classifier.categories import FailureCategory
-from src.classifier.feedback import FeedbackStore
+from classifier.categories import FailureCategory
+from classifier.feedback import FeedbackStore
 
 
 @pytest.fixture

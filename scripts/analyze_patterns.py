@@ -28,8 +28,8 @@ from pathlib import Path
 # Add parent directory to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.analyzer import FailureAnalyzerJob
-from src.classifier import FailureCategory
+from analyzer import FailureAnalyzerJob
+from classifier import FailureCategory
 
 logger = logging.getLogger(__name__)
 

@@ -4,9 +4,9 @@
 import sys
 from pathlib import Path
 
-from src.classifier.classifier import FailureClassifier
-from src.classifier.feedback import FeedbackStore
-from src.classifier.categories import FailureCategory
+from classifier.classifier import FailureClassifier
+from classifier.feedback import FeedbackStore
+from classifier.categories import FailureCategory
 
 
 def main():

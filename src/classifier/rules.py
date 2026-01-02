@@ -2,7 +2,6 @@
 
 from typing import List, Tuple
 
-
 # Pattern format: (regex_pattern, reasoning)
 # Patterns are case-insensitive
 

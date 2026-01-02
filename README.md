@@ -451,6 +451,34 @@ Based on analysis of production data, here are the most common failure patterns:
 - Various edge cases that don't match existing patterns
 - **Recommendation:** Enable LLM classification to reduce UNKNOWN category
 
+## Development
+
+### AI-Assisted Development
+
+This project includes AI instructions for consistent code generation.
+
+**For ChatGPT/Claude users** (most common):
+1. Copy [docs/CODING_STANDARDS.md](docs/CODING_STANDARDS.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+2. Paste at start of conversation
+3. Say: "Follow these guidelines"
+
+**For GitHub Copilot users**: See [docs/GITHUB_COPILOT.md](docs/GITHUB_COPILOT.md)
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for full development guide.
+
+### Code Quality Tools
+
+```bash
+# Type checking
+uv run mypy src/
+
+# Linting
+uv run ruff check src/
+
+# Tests
+uv run pytest tests/
+```
+
 ## License
 
 Proprietary - Grasp Labs

@@ -8,8 +8,8 @@ from datetime import datetime, timedelta, timezone
 from typing import Any
 from uuid import UUID
 
-from src.classifier import FailureCategory, FailureClassifier, ClassifiedFailure
-from src.db import get_db_session, get_failed_jobs
+from classifier import ClassifiedFailure, FailureCategory, FailureClassifier
+from db import get_db_session, get_failed_jobs
 
 logger = logging.getLogger(__name__)
 

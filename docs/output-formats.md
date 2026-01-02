@@ -50,53 +50,7 @@ a582e463   Watermoon - Customer      Xledger-import       INPUT_DATA_QUALITY   r
 ...
 ```
 
-### 2. Markdown Format
-
-**Use case:** Documentation, reports, sharing with team, GitHub/Confluence
-
-**Command:**
-```bash
-uv run python cli.py --format markdown --output report.md
-```
-
-**Features:**
-- Professional formatted report
-- Summary statistics
-- Category breakdown table
-- Tenant and pipeline analysis
-- **Detailed error table** (markdown table format)
-- Detailed error listings by category
-- Ready for GitHub, Confluence, or any markdown viewer
-
-**Example output:**
-```markdown
-# Failure Analysis Report
-
-**Analysis Period:** 2024-12-01 00:00:00 to 2024-12-31 23:59:59  
-**Analyzed At:** 2024-12-25 15:30:00  
-
-## Summary
-
-- **Total Failed Jobs:** 156
-- **Total Errors:** 229
-
-## Errors by Category
-
-| Category | Count | Percentage |
-|----------|-------|------------|
-| THIRD_PARTY_SYSTEM | 100 | 43.7% |
-| INPUT_DATA_QUALITY | 80 | 34.9% |
-| WORKFLOW_ENGINE | 49 | 21.4% |
-
-## All Errors - Detailed Breakdown
-
-| Job ID | Pipeline | Activity | Category | Classified By | Error Message | Finished At |
-|--------|----------|----------|----------|---------------|---------------|-------------|
-| a582e463 | Watermoon - Customer | reading_from_s3 | INPUT_DATA_QUALITY | rules | An error occurred (404)... | 2024-12-25T10:30:00 |
-...
-```
-
-### 3. JSON Format
+### 2. JSON Format
 
 **Use case:** Programmatic processing, APIs, data pipelines, custom analysis
 
@@ -146,7 +100,7 @@ uv run python cli.py --format json --output analysis.json
 }
 ```
 
-### 4. CSV Format
+### 3. CSV Format
 
 **Use case:** Spreadsheet analysis, Excel, Google Sheets, BI tools, pivot tables
 
@@ -187,8 +141,8 @@ a582e463-568a-43d7-aae1-e681ee1a97fe,Watermoon - Customer,tenant-123,2024-12-25T
 
 ### Weekly Team Report
 ```bash
-# Generate markdown report for last 7 days
-uv run python cli.py --hours 168 --format markdown --output weekly_report.md
+# Generate JSON report for last 7 days
+uv run python cli.py --hours 168 --format json --output weekly_report.json
 ```
 
 ### Monthly Executive Summary
@@ -214,30 +168,28 @@ python process_errors.py /tmp/daily_errors.json
 
 ### Slack/Email Notifications
 ```bash
-# Generate markdown for Slack
-uv run python cli.py --hours 24 --format markdown | slack-cli send --channel alerts
+# Generate text for Slack
+uv run python cli.py --hours 24 --format text | slack-cli send --channel alerts
 ```
 
 ## Comparison Table
 
-| Feature | Text | Markdown | JSON | CSV |
-|---------|------|----------|------|-----|
-| Human-readable | ✅ | ✅ | ❌ | ⚠️ |
-| Machine-readable | ❌ | ⚠️ | ✅ | ✅ |
-| Detailed error table | ✅ | ✅ | ✅ | ✅ |
-| Summary statistics | ✅ | ✅ | ✅ | ❌ |
-| Excel/Sheets compatible | ❌ | ❌ | ⚠️ | ✅ |
-| GitHub/Confluence ready | ❌ | ✅ | ❌ | ❌ |
-| Programmatic processing | ❌ | ❌ | ✅ | ⚠️ |
-| Pivot tables | ❌ | ❌ | ❌ | ✅ |
-| BI tools (Tableau, etc.) | ❌ | ❌ | ⚠️ | ✅ |
+| Feature | Text | JSON | CSV |
+|---------|------|------|-----|
+| Human-readable | ✅ | ❌ | ⚠️ |
+| Machine-readable | ❌ | ✅ | ✅ |
+| Detailed error table | ✅ | ✅ | ✅ |
+| Summary statistics | ✅ | ✅ | ❌ |
+| Excel/Sheets compatible | ❌ | ⚠️ | ✅ |
+| Programmatic processing | ❌ | ✅ | ⚠️ |
+| Pivot tables | ❌ | ❌ | ✅ |
+| BI tools (Tableau, etc.) | ❌ | ⚠️ | ✅ |
 
 ## Tips
 
 1. **Use CSV for analysis** - If you need to analyze patterns, create pivot tables, or filter data, use CSV format
-2. **Use Markdown for sharing** - If you're sharing with your team or documenting issues, use Markdown
-3. **Use JSON for automation** - If you're building automated workflows or integrations, use JSON
-4. **Use Text for quick checks** - If you just want to see what's failing, use Text format
+2. **Use JSON for automation** - If you're building automated workflows or integrations, use JSON
+3. **Use Text for quick checks** - If you just want to see what's failing, use Text format
 
 ## Combining Formats
 
@@ -246,16 +198,18 @@ You can generate multiple formats in one go:
 ```bash
 # Generate all formats
 uv run python cli.py --hours 720 --format json --output analysis.json
-uv run python cli.py --hours 720 --format markdown --output report.md
 uv run python cli.py --hours 720 --format csv --output errors.csv
+uv run python cli.py --hours 720 --format text > report.txt
 ```
 
 Or use a script:
 ```bash
 #!/bin/bash
 HOURS=720
-for format in json markdown csv text; do
+for format in json csv; do
     uv run python cli.py --hours $HOURS --format $format --output "output/analysis.$format"
 done
+# Text format to stdout
+uv run python cli.py --hours $HOURS --format text > output/analysis.txt
 ```
 
