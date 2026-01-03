@@ -222,7 +222,7 @@ Respond with JSON only:
                 return (FailureCategory.WORKFLOW_ENGINE, reasoning)
 
         # HTTP status code heuristics
-        if 400 <= code < 500:
+        if code is not None and 400 <= code < 500:
             return (FailureCategory.INPUT_DATA_QUALITY, f"HTTP {code} client error")
 
         return None

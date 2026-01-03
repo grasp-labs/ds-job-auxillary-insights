@@ -35,7 +35,8 @@ The classifier uses a **hybrid approach** that improves over time:
 2. **LLM with Few-Shot Learning** (smart, learns from corrections) - Uses local LLM via OpenAI-compatible API
    - **Ollama** (default) - `http://localhost:11434/v1`
    - **LM Studio** - `http://localhost:1234/v1`
-   - **Any OpenAI-compatible endpoint** - vLLM, LocalAI, etc.
+   - **vLLM** (Qwen, Llama, etc.) - `http://localhost:8000/v1` - See [Qwen Integration](docs/qwen-integration.md)
+   - **Any OpenAI-compatible endpoint** - LocalAI, etc.
 3. **Feedback Loop** (self-improving) - Learns from your corrections
 
 ### 🔄 Improving Classification (Recommended Workflow)
